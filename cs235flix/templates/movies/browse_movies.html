@@ -1,0 +1,214 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<main id="main">
+    <header id="movie-header">
+    </header>
+
+    <nav style="clear:both">
+            <div style="float:left">
+                {% if first_movie_url is not none %}
+                    <button class="btn-general" onclick="location.href='{{first_movie_url}}'">First</button>
+                {% else %}
+                    <button class="btn-general-disabled" disabled>First</button>
+                {% endif %}
+                {% if prev_movie_url is not none %}
+                    <button class="btn-general" onclick="location.href='{{prev_movie_url}}'">Previous</button>
+                {% else %}
+                    <button class="btn-general-disabled" disabled>Previous</button>
+                {% endif %}
+            </div>
+            <div style="float:right">
+                {% if next_movie_url is not none %}
+                    <button class="btn-general" onclick="location.href='{{next_movie_url}}'">Next</button>
+                {% else %}
+                    <button class="btn-general-disabled" disabled>Next</button>
+                {% endif %}
+                {% if last_movie_url is not none %}
+                    <button class="btn-general" onclick="location.href='{{last_movie_url}}'">Last</button>
+                {% else %}
+                    <button class="btn-general-disabled" disabled>Last</button>
+                {% endif %}
+            </div>
+        </nav>
+
+    {% if page == "year" %}
+        <div class="movie-content">
+            <h1>Movies in {{ movies_title }}</h1><br>
+        </div>
+
+        <div style="float:center">
+            {% for k, v in years_dict | dictsort -%}
+                <button class="btn-general" onclick="location.href='{{ v }}'">{{k}}</button>
+            {% endfor %}
+        </div>
+        <br><br><br>
+
+        {% for movie in movie_batch %}
+            <h2>{{movie.title}}</h2>
+            <h4>{{movie.year}}</h4>
+            <h4>{{movie.description}}</h4>
+            <img src="{{movie.poster}}">
+
+            <div style="float:left">
+                {% if movie['watchlist'] == False %}
+                    <button class="btn-general" onclick="location.href='{{ movie.add_to_watchlist_url }}'">Add to Watchlist</button>
+                {% elif movie['watchlist'] == True %}
+                    <button class="btn-general-disabled">Added to Watchlist</button>
+                {% endif %}
+
+                {% if movie.reviews|length > 0 and movie.rank != show_reviews_for_movies %}
+                    <button class="btn-general" onclick="location.href='{{ movie.view_review_url }}'">View Reviews</button>
+                {% endif %}
+                <button class="btn-general" onclick="location.href='{{ movie.add_review_url }}'">Post Review</button>
+            </div>
+
+            {% if movie.rank == show_reviews_for_movies %}
+            <div style="clear:both">
+                {% for review in movie.reviews %}
+                    <h4>{{ review.username }} : {{ review.review_text }} <br>Rating: {{ review.rating }} <br>{{ review.timestamp }}<br><br></h4>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <br> <br> <br>
+
+        {% endfor %}
+
+    {% elif page == "search" %}
+        <div class="movie-content">
+            <h1>Search Results: {{count}} {{ movie_plural }} found.</h1><br>
+
+            <h2>Movies {{name}}:</h2>
+            <br>
+
+            <div class="content">
+                {% if search_type == "movie" %}
+
+                    <div id="movie-poster">
+                    </div>
+
+                    <div id="search-movie">
+                        {% for movie in movies %}
+                            <h1 id="title">{{ movie['title'] }} {{ movie['year'] }}</h1><br><br>
+                            <h4>{{ movie['description'] }}</h4>
+                            <h4>Starring: {{ movie['actors'] | replace("[","") | replace("<","") | replace(">","") | replace("]","") | replace("Actor","") }}</h4>
+
+                            <div style="float:left">
+                                {% if movie['watchlist'] == False %}
+                                    <button class="btn-general" onclick="location.href='{{ movie.add_to_watchlist_url }}'">Add to Watchlist</button>
+                                {% elif movie['watchlist'] == True %}
+                                    <button class="btn-general-disabled">Added to Watchlist</button>
+                                {% endif %}
+
+                                {% if movie.reviews|length > 0 and movie.rank != show_reviews_for_movie %}
+                                    <button class="btn-general" onclick="location.href='{{ movie.view_review_url }}'">View Reviews</button>
+                                {% endif %}
+                                <button class="btn-general" onclick="location.href='{{ movie.add_review_url }}'">Post Review</button>
+                            </div>
+
+                            {% if movie['rank'] == show_reviews_for_movies %}
+                                <div style="clear:both">
+                                    {% for review in movie.reviews %}
+                                        <h4>{{ review.username }} : {{ review.review_text }} <br>Rating: {{ review.rating }} <br>{{ review.timestamp }}<br><br></h4>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        <br><br><br>
+
+                        {% endfor %}
+                    </div>
+
+                {% else %}
+                    {% for movie in movies %}
+                        <img src="{{movie.poster}}">
+
+                        <h3>{{ movie['title'] }}<br>{{ movie['year'] }}</h3>
+                        <h4>{{ movie['description'] }}</h4>
+                        <h4>Starring: {{ movie['actors'] | replace("[","") | replace("<","") | replace(">","") | replace("]","") | replace("Actor","") }}</h4>
+
+
+                        <div style="float:left">
+                            {% if movie['watchlist'] == False %}
+                                <button class="btn-general" onclick="location.href='{{ movie.add_to_watchlist_url }}'">Add to Watchlist</button>
+                            {% elif movie['watchlist'] == True %}
+                                <button class="btn-general-disabled">Added to Watchlist</button>
+                            {% endif %}
+
+                            {% if movie.reviews|length > 0 and movie['rank'] != show_reviews_for_movies %}
+                                <button class="btn-general" onclick="location.href='{{ movie.view_review_url }}'">View Reviews</button>
+                            {% endif %}
+                            <button class="btn-general" onclick="location.href='{{ movie.add_review_url }}'">Post Review</button>
+                        </div>
+
+
+                        {% if movie['rank'] == show_reviews_for_movies %}
+                            <div style="clear:both">
+                                {% for review in movie.reviews %}
+                                    <h4>{{ review.username }} : {{ review.review_text }} <br>Rating: {{ review.rating }} <br>{{ review.timestamp }}<br><br></h4>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <br><br><br>
+
+                    {% endfor %}
+
+                {% endif %}
+            </div>
+        </div>
+
+    {% elif page == "watchlist" %}
+        <br>
+        <div class="movie-content">
+            <h1>{{ title }}</h1>
+            {% for movie in watchlist %}
+                <img src="{{movie.poster}}">
+
+                <h2>{{ movie['title'] }}<br>{{ movie['year'] }}</h2>
+                <h4>{{ movie['description'] }}</h4>
+                <h4>Starring: {{ movie['actors'] | replace("[","") | replace("<","") | replace(">","") | replace("]","") | replace("Actor","") }}</h4>
+
+                <div style="float:left">
+                    {% if movie.reviews|length > 0 and movie['rank'] != movie_to_show_reviews %}
+                        <button class="btn-general" onclick="location.href='{{ movie.view_review_url }}'">View Reviews</button>
+                    {% endif %}
+                    <button class="btn-general" onclick="location.href='{{ movie.add_review_url }}'">Post Review</button>
+                </div>
+
+                {% if movie['rank'] == movie_to_show_reviews %}
+                    <div style="clear:both">
+                        {% for review in movie.reviews %}
+                            <h4>{{ review.username }} : {{ review.review_text }} <br>Rating: {{ review.rating }} <br>{{ review.timestamp }}<br><br></h4>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            <br><br><br>
+            {% endfor %}
+        </div>
+
+    {% endif %}
+
+<script>
+    var data;
+
+    function load_image(){
+        var search = "{{search_movie_poster}}";
+        $.get("https://www.omdbapi.com/?s="+search+"&apikey=ba1f4581", function(rawdata){
+            var rawstring =JSON.stringify(rawdata);
+            data =JSON.parse(rawstring);
+
+            var title = data.Search[0].Title;
+            var year = data.Search[0].Year;
+            var imdburl="https://www.imdb.com/title/"+data.Search[0].imdbID+"/";
+
+            var posterurl =data.Search[0].Poster;
+            document.getElementById('movie-poster').innerHTML="<img src= '"+posterurl+"'>";
+        });
+    }
+    load_image();
+</script>
+
+</main>
+{% endblock %}

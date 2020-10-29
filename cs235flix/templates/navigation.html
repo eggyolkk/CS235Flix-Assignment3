@@ -1,0 +1,22 @@
+<nav class="navbar">
+
+  <a class="btn-nav" href="{{ url_for('movies_bp.browse_movies') }}">Browse</a>
+  <a class="btn-nav" href="{{ url_for('movies_bp.movies_by_date') }}">Browse by year</a>
+
+  <div class="dropdown">
+    <button class="dropbtn">Browse by
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+      <a href="{{ url_for('search_bp.movie') }}">Movie</a>
+      <a href="{{ url_for('search_bp.actor') }}">Actors</a>
+      <a href="{{ url_for('search_bp.director') }}">Director</a>
+      <a href="{{ url_for('search_bp.genre') }}">Genres</a>
+    </div>
+  </div>
+
+  <a class="btn-nav" href="{{ url_for('movies_bp.watchlist') }}">Watchlist</a>
+  <a class="btn-nav" href="{{ url_for('authentication_bp.register') }}">Register</a>
+  <a class="btn-nav" href="{{ url_for('authentication_bp.login') }}">Login</a>
+  <a class="btn-nav" href="{{ url_for('authentication_bp.logout') }}">Logout</a>
+</nav>

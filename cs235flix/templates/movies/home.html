@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<main id="main">
+    <header id="movies-header">
+    </header>
+
+    <button class="btn-general" onclick="location.href='{{first_movie_url}}'">Refresh</button>
+
+
+    <div class="movie-content">
+        <h1>Looking for something to watch? Here are some flicks to try out:</h1><br>
+        <div class="content">
+            {% for movie in random %}
+                <h3>{{ movie['title'] }} {{ movie['year'] }}</h3>
+                <h4>{{ movie['description'] }}</h4>
+                <br>
+
+            {% endfor %}
+        </div>
+    </div>
+
+    {% for movie in movies %}
+    <movie id="movie">
+        <h2>{{movie.title}}</h2>
+        <p>{{movie.date}}</p>
+    </movie>
+    {% endfor %}
+
+</main>
+
+{% endblock %}

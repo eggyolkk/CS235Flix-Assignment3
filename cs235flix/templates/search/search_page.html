@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<main id="main">
+    <div class="formwrapper"
+        <header class="movie-header">
+            <h1>{{ movies_title }}</h1>
+        </header>
+
+        <div class="search-page">
+            <h1>Search by {{search_variable}}:</h1>
+        </div>
+
+        <form method="POST" action="{{ handler_url }}">
+            {{ form.csrf_token }}
+            <div class="search">
+                {% if search_variable == "actor" %}
+                    <h3>Search for movies by actor name</h3>{{ form.actor }}
+                {% elif search_variable == "director" %}
+                    <h3>Search for movies by director</h3>{{ form.director }}
+                {% elif search_variable == "genre" %}
+                    <h3>Search for movies by genre(s) - separate multiple genres by a comma (",")</h3>{{ form.genre }}
+                {% elif search_variable == "movie" %}
+                    <h3>Search for movies by name</h3>{{ form.movie }}
+                {% endif %}
+            </div>
+            {{ form.submit }}
+        </form>
+    <div>
+</main>
+{% endblock %}
